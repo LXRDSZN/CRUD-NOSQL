@@ -14,7 +14,10 @@ defineProps({
       You’ve successfully created a project with
       <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
+      <RouterLink to="/Registrate">Registrate </RouterLink>
+      <RouterLink to="/">Inicia Sesion </RouterLink>
     </h3>
+    
   </div>
 </template>
 
@@ -29,7 +32,19 @@ h1 {
 h3 {
   font-size: 1.2rem;
 }
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
+ul.additional-options {
+  margin-top: auto;
+}
+
+li {
+  margin: 0.5rem 0;
+}
 .greetings h1,
 .greetings h3 {
   text-align: center;
