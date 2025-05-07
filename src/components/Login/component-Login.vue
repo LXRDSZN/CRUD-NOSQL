@@ -30,49 +30,48 @@
   const toast = useToast();
   const router = useRouter(); // Router para redirigir
   
-  // Función de login
   const login = async () => {
-    if (!username.value || !password.value) {
-      toast.error('Por favor, ingresa ambos campos', {
+  if (!username.value || !password.value) {
+    toast.error('Por favor, ingresa ambos campos', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+    return;
+  }
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', {
+      usuario: username.value,
+      contrasena: password.value,
+    }, {
+      withCredentials: true, // Permite enviar y recibir cookies
+    });
+
+    if (response.data.message === 'Login exitoso') {
+      // Muestra un mensaje de éxito
+      toast.success('Inicio de sesión exitoso. Bienvenido!', {
         position: 'top-right',
-        duration: 5000,
+        duration: 2000, //duracion de la animacion
         dismissible: true,
       });
-      return;
+
+      // Redirige a la página de Dashboard
+      setTimeout(() => {
+        router.push('/Dashboard'); // Redirigir al panel
+      }, 750);
     }
-  
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        usuario: username.value,
-        contrasena: password.value,
-      });
-  
-      if (response.data.token) {
-        // Guarda el token en localStorage
-        localStorage.setItem('token', response.data.token);
-  
-        // Muestra un mensaje de éxito
-        toast.success('Inicio de sesión exitoso. Bienvenido!', {
-          position: 'top-right',
-          duration: 2000, //duracion de la animaciondel login exitoso
-          dismissible: true,
-        });
-  
-        // Añadimos un pequeño retraso para que el usuario vea el mensaje antes de la redirección
-        setTimeout(() => {
-          router.push('/Dashboard'); // Redirigir al panel
-        }, 750); // tiempo de redireccion al panel 
-      }
-    } catch (error) {
-      const message =
-        error.response?.data?.message || 'Hubo un problema con la conexión';
-      toast.error(message, {
-        position: 'top-right',
-        duration: 5000,
-        dismissible: true,
-      });
-    }
-  };
+  } catch (error) {
+    const message =
+      error.response?.data?.message || 'Hubo un problema con la conexión';
+    toast.error(message, {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+  }
+};
+
   </script>
   
   <style scoped>

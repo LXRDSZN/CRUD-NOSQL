@@ -70,14 +70,25 @@ const login = async () => {
       }, 750); // tiempo de redireccion al login
     }
   } catch (error) {
-    const message =
-      error.response?.data?.message || 'Hubo un problema con la conexión';
-    toast.error(message, {
+      const message = error.response?.data?.message || 'Hubo un problema con la conexión';
+      // Si hay errores de validación (de Zod), los mostramos todos
+      if (error.response?.data?.errors) {
+          error.response.data.errors.forEach(err => {
+          toast.error(`${err.field}: ${err.message}`, {
+          position: 'top-right',
+          duration: 5000,
+          dismissible: true,
+        });
+      });
+    } else {
+      // Si es otro tipo de error
+      toast.error(message, {
       position: 'top-right',
       duration: 5000,
       dismissible: true,
     });
   }
+}
 };
 
   </script>
