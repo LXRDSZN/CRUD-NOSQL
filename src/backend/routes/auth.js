@@ -32,9 +32,10 @@ router.post('/auth/login', validateSchema(loginSchema), async (req, res) => {
 
   // Enviar el token como una cookie
   res.cookie('token', token, {
-    httpOnly: true,  // La cookie no puede ser accedida por JavaScript del cliente
-    secure: process.env.NODE_ENV === 'production',  // Asegúrate de que la cookie solo se envíe sobre HTTPS en producción
-    maxAge: 3600000,  // Expira en 1 hora
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'None', 
+    maxAge: 3600000,
   });
 
   return res.json({ message: 'Login exitoso' });
@@ -58,6 +59,23 @@ router.post('/auth/signup', validateSchema(signupSchema), async (req, res) => {
     console.error('Error al registrar el usuario:', error);
     return res.status(500).json({ message: 'Error del servidor', error: error.message });
   }
+});
+
+
+/*
+##################################################################################################
+#                          Endpoint para borrar cookie                                            #
+##################################################################################################
+*/
+
+//Ruta  de endpoint para borrar cookie
+router.post('/auth/logout', (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Lax' 
+  });
+  res.json({ message: 'Sesión cerrada' });
 });
 
 export default router;

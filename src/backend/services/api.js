@@ -53,3 +53,22 @@ export const signup = async (username, email, password) => {
     throw error;
   }
 };
+
+/*
+##################################################################################################
+#                          api para cerrar sesión                                                 #
+##################################################################################################
+*/
+
+// Función para cerrar sesión
+export const logout = async () => {
+  try {
+    const response = await api.post('/auth/logout', {}, {
+      withCredentials: true, //cookie HttpOnly
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+    throw error;
+  }
+};
