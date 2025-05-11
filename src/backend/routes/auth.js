@@ -4,8 +4,8 @@ import { checkUserCredentials } from "../models/login/login.js";
 import { signup } from "../models/signup/signup.js";
 import jwt from 'jsonwebtoken';
 import validateSchema from "../middleware/validateSchema.js";
+import { verificarToken } from '../middleware/authMiddleware.js';
 import { loginSchema, signupSchema } from "../middleware/authSchemas.js";
-
 const router = Router();
 router.post("/register", register);
 router.post("/login", login);
@@ -33,10 +33,11 @@ router.post('/auth/login', validateSchema(loginSchema), async (req, res) => {
   // Enviar el token como una cookie
   res.cookie('token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'None', 
+    secure: false,       // ⚠️ solo en desarrollo
+    sameSite: 'Lax',     // ✅ compatible con HTTP
     maxAge: 3600000,
   });
+  
 
   return res.json({ message: 'Login exitoso' });
 });
@@ -77,5 +78,16 @@ router.post('/auth/logout', (req, res) => {
   });
   res.json({ message: 'Sesión cerrada' });
 });
+
+
+/*
+##################################################################################################
+#                          Endpoint para verificar la  cookie                                     #
+##################################################################################################
+*/
+router.get('/auth/perfil', verificarToken, (req, res) => {
+  res.json({ message: 'Acceso autorizado', usuario: req.usuario });
+});
+
 
 export default router;

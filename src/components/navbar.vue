@@ -48,11 +48,11 @@
                 </li>
                 -->
                
-                <li>
-                    <RouterLink to="/">
-                        <span class="material-icons">logout</span> Salir
-                    </RouterLink>
-                </li>
+                <li @click="logout">
+                    <a href="#">
+                      <span class="material-icons">logout</span> Salir
+                    </a>
+                  </li>
             </ul>
         </nav>
 
@@ -65,13 +65,28 @@
 
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const isSidebarCollapsed = ref(false);
+const router = useRouter();
 
 function toggleSidebar() {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
 }
+
+async function logout() {
+  try {
+    await axios.post('http://localhost:5000/api/auth/logout', {}, {
+      withCredentials: true,
+    });
+    router.push('/'); // redirige al inicio
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+  }
+}
 </script>
+
 
 <style scoped>
 /* Contenedor principal que abarca toda la estructura */

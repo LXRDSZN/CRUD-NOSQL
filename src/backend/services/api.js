@@ -72,3 +72,21 @@ export const logout = async () => {
     throw error;
   }
 };
+
+/*
+##################################################################################################
+#                          api para obtener la cookie                                             #
+##################################################################################################
+*/
+
+export const obtenerPerfil = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/perfil', {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener perfil:', error);
+    throw error;
+  }
+};
