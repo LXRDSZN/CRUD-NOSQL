@@ -13,7 +13,6 @@ const api = axios.create({
 #                          api para login                                                         #
 ##################################################################################################
 */
-// Función para login
 export const login = async (username,password) => {
   try {
     const response = await api.post('http://localhost:5000/api/auth/login', {
@@ -36,7 +35,6 @@ export const login = async (username,password) => {
 ##################################################################################################
 */
 
-// Función para registrar un nuevo usuario
 export const signup = async (username, email, password) => {
   try {
     const response = await api.post('http://localhost:5000/api/auth/signup', {
@@ -60,10 +58,9 @@ export const signup = async (username, email, password) => {
 ##################################################################################################
 */
 
-// Función para cerrar sesión
 export const logout = async () => {
   try {
-    const response = await api.post('/auth/logout', {}, {
+    const response = await api.post('http://localhost:5000/api/auth/logout', {}, {
       withCredentials: true, //cookie HttpOnly
     });
     return response.data;
@@ -81,12 +78,72 @@ export const logout = async () => {
 
 export const obtenerPerfil = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/perfil', {
+    const response = await axios.get('http://localhost:5000/api/auth/perfil', {
       withCredentials: true
     });
     return response.data;
   } catch (error) {
     console.error('Error al obtener perfil:', error);
+    throw error;
+  }
+};
+
+
+/*
+##################################################################################################
+#                          api para obtener la materia                                            #
+##################################################################################################
+*/
+
+export const obtenermateria = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/auth/materias', {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener la materia:', error);
+    throw error;
+  }
+};
+
+/*
+##################################################################################################
+#                          api para borrar la materia                                            #
+##################################################################################################
+*/
+
+
+
+export const eliminarMateria = async (key) => {
+  try {
+    const response = await axios.delete(`http://localhost:5000/api/auth/bajamateria/${key}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error al eliminar la Materia:', error);
+    throw error;
+  }
+};
+
+/*
+##################################################################################################
+#                          api para actualizar la materia                                         #
+##################################################################################################
+*/
+
+export const actualizarMateria = async (key, subjectname) => {
+  try {
+    const response = await axios.put(`http://localhost:5000/api/auth/actualizarmateria/${key}`, {
+      subjectname,
+    }, {
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar la Materia:', error);
     throw error;
   }
 };

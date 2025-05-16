@@ -6,7 +6,8 @@ const route = useRoute();
 
 // Función para verificar si estamos en una de las vistas del panel
 const isPanelView = () => {
-  return route.name === 'Dashboard';
+  return route.name === 'Dashboard' ||
+  route.name === 'Materias';
 };
 </script>
 

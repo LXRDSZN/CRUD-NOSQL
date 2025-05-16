@@ -1,11 +1,16 @@
 import { Router } from "express";
 import { login, register } from "../controllers/user.controllers.js";
+
 import { checkUserCredentials } from "../models/login/login.js";
 import { signup } from "../models/signup/signup.js";
 import jwt from 'jsonwebtoken';
 import validateSchema from "../middleware/validateSchema.js";
 import { verificarToken } from '../middleware/authMiddleware.js';
 import { loginSchema, signupSchema } from "../middleware/authSchemas.js";
+//Parametros de las funciones del CRUD (CREAR, LEER, BORRAR, MODIFICAR)
+import { createSubject, getSubjects, deleteSubject,updateSubject} from "../models/materias/materias.js";
+import { verificarmaterias } from "../middleware/materias.js";
+
 const router = Router();
 router.post("/register", register);
 router.post("/login", login);
@@ -89,5 +94,35 @@ router.get('/auth/perfil', verificarToken, (req, res) => {
   res.json({ message: 'Acceso autorizado', usuario: req.usuario });
 });
 
+/*
+##################################################################################################
+#                          Endpoint para registrarse  materias                                     #
+##################################################################################################
+*/
+
+router.post("/auth/materias", verificarmaterias, createSubject);
+/*
+##################################################################################################
+#                          Endpoint para consultar  materias                                     #
+##################################################################################################
+*/
+router.get('/auth/materias', verificarmaterias, getSubjects);
+
+
+/*
+##################################################################################################
+#                          Endpoint para borrar  materias                                         #
+##################################################################################################
+*/
+router.delete('/auth/bajamateria/:key', verificarToken, deleteSubject);
+
+/*
+##################################################################################################
+#                          Endpoint para actualizar  materias                                      #
+##################################################################################################
+*/
+router.put('/auth/actualizarmateria/:key', verificarToken, updateSubject);
 
 export default router;
+
+
