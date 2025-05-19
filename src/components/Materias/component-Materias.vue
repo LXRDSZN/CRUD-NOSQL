@@ -7,6 +7,7 @@ import { obtenermateria, eliminarMateria } from '@/backend/services/api';
 /* inicio  de importaciones de  componentes */
 import AltaMaterias from './Alta-Materias/Alta-Materias.vue';
 import ActualizarMaterias from './Actualizar-Materias/Actualizar-Materias.vue';
+import ConsultaMaterias from './Consulta-Materias/Consulta-Materias.vue';
 /* fin de importaciones de componentes */
 
 import { ref, onMounted } from 'vue';
@@ -80,6 +81,14 @@ const modificarMateria = (key) => {
   }
 };
 
+const mostrarFormularioConsulta = ref(false); // Estado para mostrar el formulario de consulta
+
+// Función para mostrar el formulario de consulta
+const consultarAlumno = () => {
+  mostrarFormularioConsulta.value = true;
+  mostrarFormulario.value = false;
+  mostrarFormularioActualizar.value = false;
+};
 // Guardar cambios después de actualizar
 const guardarCambiosActualizados = async (materiaActualizada) => {
   if (!materiaActualizada) {
@@ -111,6 +120,9 @@ const guardarCambiosActualizados = async (materiaActualizada) => {
           v-if="!mostrarFormulario && !mostrarFormularioActualizar">
           Agregar Materia
         </button>
+        <button @click="consultarAlumno" class="btn btn-consultar" v-if="!mostrarFormulario && !mostrarFormularioActualizar && !mostrarFormularioConsulta">
+          Consultar Materia
+        </button>
       </div>
 
       <!-- Formulario de alta -->
@@ -127,6 +139,11 @@ const guardarCambiosActualizados = async (materiaActualizada) => {
         @guardar="guardarCambiosActualizados"
         @cancelar="cancelarFormulario"
       />
+
+      <ConsultaMaterias
+      v-if="mostrarFormularioConsulta"
+      @cancelar="cancelarConsulta"
+    />
 
       <!-- Tabla de materias -->
       <table class="materias-table" v-if="!mostrarFormulario && !mostrarFormularioActualizar">
@@ -247,6 +264,16 @@ const guardarCambiosActualizados = async (materiaActualizada) => {
 
 .btn-delete:hover {
   background-color: #d32f2f;
+}
+.btn-consultar {
+  background-color: #ff9800;
+  color: white;
+  width: 200px;
+  height: 36px;
+}
+
+.btn-consultar:hover {
+  background-color: #f57c00;
 }
 
 /* Contenedor de encabezado y botón */
